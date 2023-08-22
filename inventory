@@ -1,0 +1,10 @@
+stapp01 ansible_host=172.16.238.10 ansible_connection=ssh ansible_user=tony ansible_password=Ir0nM@n ansible_become_pass=Ir0nM@n
+stapp02 ansible_host=172.16.238.11 ansible_connection=ssh ansible_user=steve ansible_password=Am3ric@ ansible_become_pass=Am3ric@
+stapp03 ansible_host=172.16.238.12 ansible_connection=ssh ansible_user=banner ansible_password=BigGr33n ansible_become_pass=BigGr33n
+stlb01 ansible_host=172.16.238.14 ansible_connection=ssh ansible_user=loki ansible_password=Mischi3f ansible_become_pass=Mischi3f
+stdb01 ansible_host=172.16.239.10 ansible_connection=ssh ansible_user=peter ansible_password=Sp!dy ansible_become_pass=Sp!dy
+ststor01 ansible_host=172.16.238.15 ansible_connection=ssh ansible_user=natasha ansible_password=Bl@kW ansible_become_pass=Bl@kW
+stbkp01 ansible_host=172.16.238.16 ansible_connection=ssh ansible_user=clint ansible_password=H@wk3y3 ansible_become_pass=H@wk3y3
+stmail01 ansible_host=172.16.238.17 ansible_connection=ssh ansible_user=groot ansible_password=Gr00T123 ansible_become_pass=Gr00T123
+jenkins ansible_host=172.16.238.19 ansible_connection=ssh ansible_user=jenkins ansible_password=j@rv!s ansible_become_pass=j@rv!s
+localhost ansible_host=localhost ansible_connection=local ansible_user=thor ansible_password=mjolnir123 ansible_become_pass=mjolnir123

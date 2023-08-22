@@ -1,0 +1,11 @@
+---
+- name: create thor user at all hosts
+  hosts: all
+  become: yes
+  tasks:
+  - name: create/update user thor
+    user:
+      name: thor
+      password: "{{ '111' | password_hash('sha512') }}"
+      append: True
+      groups: wheel
