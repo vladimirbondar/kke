@@ -10,6 +10,20 @@
       append: True
       groups: wheel
   - name: ssh config without fingertips
-    copy:
-      src: .ssh
-      dest: /home/thor/.ssh
+    blockinfile:
+      path: /home/thor/.ssh/config
+      block: |
+        Host *
+          StrictHostKeyChecking no
+          UserKnownHostsFile /dev/null
+
+  #- name: ssh config without fingertips
+  #  file:
+  #    path: /home/thor/.ssh
+  #    state: directory
+  #    owner: thor
+  #    group: thor
+  #- name:
+  #  copy:
+  #    src: .ssh/config
+  #    dest: /home/thor/.ssh/config
