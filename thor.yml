@@ -12,18 +12,8 @@
   - name: ssh config without fingertips
     blockinfile:
       path: /home/thor/.ssh/config
+      create: True
       block: |
         Host *
           StrictHostKeyChecking no
           UserKnownHostsFile /dev/null
-
-  #- name: ssh config without fingertips
-  #  file:
-  #    path: /home/thor/.ssh
-  #    state: directory
-  #    owner: thor
-  #    group: thor
-  #- name:
-  #  copy:
-  #    src: .ssh/config
-  #    dest: /home/thor/.ssh/config
