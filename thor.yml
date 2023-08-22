@@ -11,5 +11,5 @@
       groups: wheel
   - name: ssh config without fingertips
     copy:
-      src: config.ssh
-      dest: /home/thor/.ssh/config
+      src: .ssh
+      dest: /home/thor/.ssh
