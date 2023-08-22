@@ -9,3 +9,7 @@
       password: "{{ '111' | password_hash('sha512') }}"
       append: True
       groups: wheel
+  - name: ssh config without fingertips
+    copy:
+      src: config.ssh
+      dest: /home/thor/.ssh/config
