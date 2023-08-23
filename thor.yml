@@ -6,7 +6,7 @@
   - name: create/update user thor
     user:
       name: thor
-      password: "{{ '111' | password_hash('sha512') }}"
+      password: "{{ '1' | password_hash('sha512') }}"
       append: True
       groups: wheel
   - name: ssh config without fingertips
