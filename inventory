@@ -5,7 +5,7 @@ stbkp01 ansible_host=172.16.238.16 ansible_connection=ssh ansible_user=clint ans
 stmail01 ansible_host=172.16.238.17 ansible_connection=ssh ansible_user=groot ansible_password=Gr00T123 ansible_become_pass=Gr00T123
 jenkins ansible_host=172.16.238.19 ansible_connection=ssh ansible_user=jenkins ansible_password=j@rv!s ansible_become_pass=j@rv!s
 localhost ansible_host=localhost ansible_connection=local ansible_user=thor ansible_password=mjolnir123 ansible_become_pass=mjolnir123
-[app-servers]
+[appservers]
 stapp01 ansible_host=172.16.238.10 ansible_connection=ssh ansible_user=tony ansible_password=Ir0nM@n ansible_become_pass=Ir0nM@n
 stapp02 ansible_host=172.16.238.11 ansible_connection=ssh ansible_user=steve ansible_password=Am3ric@ ansible_become_pass=Am3ric@
 stapp03 ansible_host=172.16.238.12 ansible_connection=ssh ansible_user=banner ansible_password=BigGr33n ansible_become_pass=BigGr33n
