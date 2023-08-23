@@ -3,7 +3,11 @@
 exe() { echo "\$ $@" ; "$@" ; }
 
 cd ~/kke
-echo Initial thor password: mjolnir123
+echo
+echo Initial thor password:
+echo ">>>>> mjolnir123 <<<<<"
+echo ">>>>> ^^^^^^^^^^ <<<<<"
+echo
 exe sudo dnf install ansible -y
 ansible-playbook -i inventory thor.yml
 cd
