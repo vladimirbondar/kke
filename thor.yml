@@ -7,10 +7,10 @@
     community.crypto.openssh_keypair:
       path: /tmp/id_rsa
 
-    - name: Fetch keys
-      ansible.builtin.set_fact:
-        the_public_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa.pub') }}"
-        the_private_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa') }}"
+  - name: Fetch keys
+   ansible.builtin.set_fact:
+    the_public_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa.pub') }}"
+    the_private_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa') }}"
 
   - name: create/update user thor
     ansible.builtin.user:
