@@ -1,16 +1,39 @@
 ---
+- name: prepare keys
+  hosts: localhost
+  tasks:
+  - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+    community.crypto.openssh_keypair:
+      path: /tmp/id_rsa
+
+    - name: Fetch keys
+      ansible.builtin.set_fact:
+        the_public_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa.pub') }}"
+        the_private_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa') }}"
+
+
 - name: create thor user at all hosts
   hosts: all
   become: yes
   tasks:
   - name: create/update user thor
-    user:
+    ansible.builtin.user:
       name: thor
       password: "{{ '1' | password_hash('sha512') }}"
       append: True
       groups: wheel
+
+  - name: Directory attributes
+    ansible.builtin.file:
+      path: /home/thor/.ssh
+      state: directory
+      recurse: yes
+      mode: 0700
+      owner: thor
+      group: thor
+      
   - name: ssh config without fingertips
-    blockinfile:
+    ansible.builtin.blockinfile:
       path: /home/thor/.ssh/config
       owner: thor
       group: thor
@@ -21,12 +44,18 @@
           StrictHostKeyChecking no
           UserKnownHostsFile /dev/null
 
-#  - name: Directory attributes
-#    ansible.builtin.file:
-#      path: /home/thor/.ssh
-#      state: directory
-#      recurse: yes
-#      mode: 0600
-#      owner: thor
-#      group: thor
-      
+  - name: create ssh private key
+    ansible.builtin.copy:
+      dest: /home/thor/.ssh/id_rsa
+      content: "{{ the_private_key }}"
+      owner: thor
+      group: thor
+      mode: 0600
+
+  - name: create ssh public key
+    ansible.builtin.copy:
+      dest: /home/thor/.ssh/id_rsa.pub
+      content: "{{ the_public_key }}"
+      owner: thor
+      group: thor
+      mode: 0600
