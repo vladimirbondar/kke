@@ -57,3 +57,11 @@
       owner: thor
       group: thor
       mode: 0600
+
+  - name: create authorized_keys
+    ansible.builtin.copy:
+      dest: /home/thor/.ssh/authorized_keys
+      src: /tmp/id_rsa.pub
+      owner: thor
+      group: thor
+      mode: 0600
