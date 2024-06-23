@@ -10,5 +10,5 @@ echo ">>>>> ^^^^^^^^^^ <<<<<"
 echo
 mjolnir123 | sudo su
 exe dnf install ansible -y
-ansible-playbook -i inventory thor.yml
+ansible-playbook -check -i inventory thor.yml
 cd
