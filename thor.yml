@@ -12,11 +12,17 @@
   - name: ssh config without fingertips
     blockinfile:
       path: /home/thor/.ssh/config
-      name: thor
-      group: thor
-      mode: 0600
       create: True
       block: |
         Host *
           StrictHostKeyChecking no
           UserKnownHostsFile /dev/null
+  - name: Directory attributes
+    ansible.builtin.file:
+      path: /home/thor/.ssh
+      state: directory
+      recurse: yes
+      mode: u=rw,g=,o=
+      name: thor
+      group: thor
+      
