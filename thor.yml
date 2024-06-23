@@ -1,16 +1,17 @@
 ---
-- name: create thor user at all hosts
-  hosts: all
-  become: yes
+- name: create keys
+  hosts: localhost
   tasks:
   - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
     community.crypto.openssh_keypair:
       path: /tmp/id_rsa
+      delegate_to: localhost
 
-  - name: Fetch keys
-   ansible.builtin.set_fact:
-    the_public_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa.pub') }}"
-    the_private_key: "{{ lookup('ansible.builtin.file', '/tmp/id_rsa') }}"
+---
+- name: create thor user at all hosts
+  hosts: all
+  become: yes
+  tasks:
 
   - name: create/update user thor
     ansible.builtin.user:
@@ -44,7 +45,7 @@
   - name: create ssh private key
     ansible.builtin.copy:
       dest: /home/thor/.ssh/id_rsa
-      content: "{{ the_private_key }}"
+      src: /tmp/id_rsa
       owner: thor
       group: thor
       mode: 0600
@@ -52,7 +53,7 @@
   - name: create ssh public key
     ansible.builtin.copy:
       dest: /home/thor/.ssh/id_rsa.pub
-      content: "{{ the_public_key }}"
+      src: /tmp/id_rsa.pub
       owner: thor
       group: thor
       mode: 0600
