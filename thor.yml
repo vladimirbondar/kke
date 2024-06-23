@@ -20,6 +20,7 @@
     ansible.builtin.user:
       name: thor
       password: "{{ '1' | password_hash('sha512') }}"
+      path: /home/thor
       append: True
       groups: wheel
 
