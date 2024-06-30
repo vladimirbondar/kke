@@ -1,0 +1,52 @@
+---
+- name: create thor user at all hosts
+  hosts: stmail01
+  become: yes
+  vars:
+    stuser: john
+    stpassword: 123123
+    stmaildomain: stratos.xfusioncorp.com
+    sthmailhost: stmail01
+  tasks:
+
+  - name: predare data
+    ansible.builtin.set_fact:
+      pfix:
+        - name: myhostname
+          value: { stmalhost }.{ stdomain }
+        - name: mydomain
+          value: { stdomain }
+
+  - name: create/update user mail user
+    ansible.builtin.user:
+      name: "{ stuser }"
+      password: "{{ stpassword | password_hash('sha512') }}"
+
+  - name: install package postfix
+    ansible.builtin.package:
+      name: postfix
+      state: started
+
+#myhostname = stmail01.stratos.xfusioncorp.com
+#mydomain = stratos.xfusioncorp.com
+#myorigin = $mydomain
+#inet_interfaces = all
+#mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+#mynetworks = 172.16.238.0/24, 127.0.0.0/8
+#home_mailbox = Maildir/
+  
+  - name: add postfix/main.cf lines 
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^#.*{ pfix.name }'
+      line: '{ pfix.name } = { pfix.value }'
+    loop: '{ pfix }'
+
+  - name: make postfix/main.cf lines unique
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^{ pfix.name } = (?!{ pfix.value })'
+      state: absent
+    loop: '{ pfix }'
+
+
