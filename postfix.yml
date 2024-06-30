@@ -13,7 +13,7 @@
   - name: create/update user mail user
     ansible.builtin.user:
       name: "{{ stuser }}"
-      password: "{{ stpassword }} | password_hash('sha512')"
+      password: "{{ stpassword | password_hash('sha512') }}"
 
   - name: install package postfix
     ansible.builtin.package:
