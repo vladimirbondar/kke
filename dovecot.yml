@@ -28,7 +28,7 @@
       dc_master:
         - name: user
           value: postfix
-        - name: gropup
+        - name: group
           value: postfix
 
   - name: mask current settings in /etc/dovecot/conf.d/10-mail.conf
