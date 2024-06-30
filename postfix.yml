@@ -28,15 +28,17 @@
         - name: mydomain
           value: "{{ stmaildomain }}"
         - name: myorigin
-          value: $mydomain
+          value: "$mydomain"
         - name: inet_interfaces
           value: all
         - name: mydestination
-          value: $myhostname, localhost.$mydomain, localhost, $mydomain
+          value: "$myhostname, localhost.$mydomain, localhost, $mydomain"
         - name: mynetworks
-          value: 172.16.238.0/24, 127.0.0.0/8
+          value: "172.16.238.0/24, 127.0.0.0/8"
         - name: home_mailbox
-          value: Maildir/
+          value: "Maildir/"
+        - name: relay_domains
+          value: "$mydestination"
 
   # - name: prepare file
   #   ansible.builtin.copy:
