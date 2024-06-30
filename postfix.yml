@@ -9,7 +9,6 @@
     stmaildomain: stratos.xfusioncorp.com
     stmailhost: stmail01
   tasks:
-
   - name: create/update user mail user
     ansible.builtin.user:
       name: "{{ stuser }}"
@@ -58,16 +57,17 @@
       name: postfix
       state: restarted
 
+
+
 - name: Manage dovecot installation
   hosts: stmail01
   become: true
   gather_facts: false
   vars:
-    stuser: yousuf
-    stpassword: YchZHRcLkL
     stmaildomain: stratos.xfusioncorp.com
     stmailhost: stmail01
   tasks:
+
   - name: install package dovecot
     ansible.builtin.package:
       name: dovecot
@@ -144,7 +144,7 @@
       line: '    {{ item.name }} = {{ item.value }}'
     loop: '{{ dc_master }}'
 
-  - name: restart service postfix
+  - name: restart service dovecot
     ansible.builtin.service:
       name: dovecot
       state: restarted
