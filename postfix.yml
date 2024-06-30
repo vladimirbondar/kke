@@ -48,7 +48,7 @@
   - name: add postfix/main.cf lines 
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
-      regexp: '^#{{ item.name }}.*'
+      search_string: '#{{ item.name }}'
       line: '{{ item.name }} = {{ item.value }}'
     loop: '{{ pfix }}'
 
