@@ -64,15 +64,15 @@
   - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
     ansible.builtin.lineinfile:
       path: /etc/dovecot/conf.d/10-master.conf
-      regexp: '^{{ item.name }}(.*)$'
-      line: '#{{ item.name }}\1'
+      regexp: '^(|\s*){{ item.name }}(.*)$'
+      line: '\1#{{ item.name }}\2'
       backrefs: yes
     loop: '{{ dc_master }}'
 
   - name: add /etc/dovecot/conf.d/10-master.conf lines 
     ansible.builtin.lineinfile:
       path: /etc/dovecot/conf.d/10-master.conf
-      insertafter: '^#{{ item.name }}.*'
+      insertafter: '.*unix_listener dict .*'
       line: '{{ item.name }} = {{ item.value }}'
     loop: '{{ dc_master }}'
 
