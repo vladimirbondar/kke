@@ -1,6 +1,6 @@
 ---
 - name: Manage postfix installation
-  hosts: localhost
+  hosts: stmail01
   become: true
   # gather_facts: false
   vars:
@@ -18,7 +18,7 @@
   - name: install package postfix
     ansible.builtin.package:
       name: postfix
-      state: started
+      state: present
 
   - name: prepare data
     ansible.builtin.set_fact:
@@ -57,3 +57,7 @@
       state: absent
     loop: '{{ pfix }}'
 
+  - name: install package postfix
+    ansible.builtin.service:
+      name: postfix
+      state: restarted
