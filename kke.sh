@@ -21,5 +21,5 @@ echo -e ">>>>> ${BOLD_GREEN}mjolnir123${RESET} <<<<<"
 echo ">>>>> ^^^^^^^^^^ <<<<<"
 echo
 exe sudo dnf install ansible -y
-ansible-playbook -check -i inventory thor.yml
+ansible-playbook -i inventory thor.yml
 cd
