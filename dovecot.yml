@@ -92,7 +92,6 @@
       path: /etc/dovecot/conf.d/10-master.conf
       insertafter:  .*unix_listener auth-userdb.*
       line: '    {{ item.name }} = {{ item.value }}'
-      backrefs: yes
     loop: '{{ dc_master }}'
 
   - name: restart service postfix
