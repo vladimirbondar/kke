@@ -1,0 +1,82 @@
+---
+- name: Manage dovecot installation
+  hosts: stmail01
+  become: true
+  # gather_facts: false
+  vars:
+    stuser: mariyam
+    stpassword: BruCStnMT5
+    stmaildomain: stratos.xfusioncorp.com
+    stmailhost: stmail01
+  tasks:
+
+  - name: install package dovecot
+    ansible.builtin.package:
+      name: dovecot
+      state: present
+
+  - name: prepare data
+    ansible.builtin.set_fact:
+      dc_mail:
+        - name: mail_location
+          value: maildir:~/Maildir
+      dc_auth:
+        - name: disable_plaintext_auth
+          value: yes
+        - name: auth_mechanisms
+          value: 
+      dc_master:
+        - name: user
+          value: postfix
+        - name: gropup
+          value: postfix
+
+  - name: mask current settings in /etc/dovecot/conf.d/10-mail.conf
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-mail.conf
+      regexp: '^{{ item.name }}(.*)$'
+      line: '#{{ item.name }}\1'
+      backrefs: yes
+    loop: '{{ dc_mail }}'
+
+  - name: add /etc/dovecot/conf.d/10-mail.conf lines 
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-mail.conf
+      insertafter: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
+    loop: '{{ dc_mail }}'
+
+  - name: mask current settings in /etc/dovecot/conf.d/10-auth.conf
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-auth.conf
+      regexp: '^{{ item.name }}(.*)$'
+      line: '#{{ item.name }}\1'
+      backrefs: yes
+    loop: '{{ dc_auth }}'
+
+  - name: add /etc/dovecot/conf.d/10-auth.conf lines 
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-auth.conf
+      insertafter: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
+    loop: '{{ dc_auth }}'
+
+  - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-master.conf
+      regexp: '^{{ item.name }}(.*)$'
+      line: '#{{ item.name }}\1'
+      backrefs: yes
+    loop: '{{ dc_master }}'
+
+  - name: add /etc/dovecot/conf.d/10-master.conf lines 
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/conf.d/10-master.conf
+      insertafter: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
+    loop: '{{ dc_master }}'
+
+  - name: restart service postfix
+    ansible.builtin.service:
+      name: dovecot
+      state: restarted
