@@ -37,26 +37,28 @@
           value: "172.16.238.0/24, 127.0.0.0/8"
         - name: home_mailbox
           value: "Maildir/"
-        - name: relay_domains
-          value: "$mydestination"
+        # - name: relay_domains
+        #   value: "$mydestination"
 
   # - name: prepare file
   #   ansible.builtin.copy:
   #     src: main.cf.original
   #     dest: main.cf
 
-  - name: add postfix/main.cf lines 
+  - name: mask current settings in postfix/main.cf
     ansible.builtin.lineinfile:
-      path: /etc/postfix/main.cf
-      search_string: '#{{ item.name }}'
-      line: '{{ item.name }} = {{ item.value }}'
+      path: main.cf
+      regexp: '^{{ item.name }}(.*)$'
+      line: '#{{ item.name }}\1'
+      backrefs: yes
     loop: '{{ pfix }}'
 
-  - name: make postfix/main.cf lines unique
+
+  - name: add postfix/main.cf lines 
     ansible.builtin.lineinfile:
-      path: /etc/postfix/main.cf
-      regexp: '^{{ item.name }} = (?!{{ item.value }})'
-      state: absent
+      path: main.cf
+      insertafter: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
     loop: '{{ pfix }}'
 
   - name: restart service postfix
