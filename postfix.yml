@@ -1,21 +1,14 @@
 ---
-- name: create thor user at all hosts
-  hosts: stmail01
-  become: yes
+- name: Manage postfix installation
+  hosts: localhost
+  become: true
+  # gather_facts: false
   vars:
     stuser: john
     stpassword: 123123
     stmaildomain: stratos.xfusioncorp.com
-    sthmailhost: stmail01
+    stmailhost: stmail01
   tasks:
-
-  - name: predare data
-    ansible.builtin.set_fact:
-      pfix:
-        - name: myhostname
-          value: { stmalhost }.{ stdomain }
-        - name: mydomain
-          value: { stdomain }
 
   - name: create/update user mail user
     ansible.builtin.user:
@@ -27,26 +20,40 @@
       name: postfix
       state: started
 
-#myhostname = stmail01.stratos.xfusioncorp.com
-#mydomain = stratos.xfusioncorp.com
-#myorigin = $mydomain
-#inet_interfaces = all
-#mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
-#mynetworks = 172.16.238.0/24, 127.0.0.0/8
-#home_mailbox = Maildir/
-  
+  - name: prepare data
+    ansible.builtin.set_fact:
+      pfix:
+        - name: myhostname
+          value: "{{ stmailhost }}.{{ stmaildomain }}"
+        - name: mydomain
+          value: "{{ stmaildomain }}"
+        - name: myorigin
+          value: $mydomain
+        - name: inet_interfaces
+          value: all
+        - name: mydestination
+          value: $myhostname, localhost.$mydomain, localhost, $mydomain
+        - name: mynetworks
+          value: 172.16.238.0/24, 127.0.0.0/8
+        - name: home_mailbox
+          value: Maildir/
+
+  # - name: prepare file
+  #   ansible.builtin.copy:
+  #     src: main.cf.original
+  #     dest: main.cf
+
   - name: add postfix/main.cf lines 
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
-      regexp: '^#.*{ pfix.name }'
-      line: '{ pfix.name } = { pfix.value }'
-    loop: '{ pfix }'
+      regexp: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
+    loop: '{{ pfix }}'
 
   - name: make postfix/main.cf lines unique
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
-      regexp: '^{ pfix.name } = (?!{ pfix.value })'
+      regexp: '^{{ item.name }} = (?!{{ item.value }})'
       state: absent
-    loop: '{ pfix }'
-
+    loop: '{{ pfix }}'
 
