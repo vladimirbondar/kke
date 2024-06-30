@@ -4,8 +4,8 @@
   become: true
   # gather_facts: false
   vars:
-    stuser: john
-    stpassword: 123123
+    stuser: mariyam
+    stpassword: BruCStnMT5
     stmaildomain: stratos.xfusioncorp.com
     stmailhost: stmail01
   tasks:
