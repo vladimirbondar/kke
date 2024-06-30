@@ -69,11 +69,12 @@
       backrefs: yes
     loop: '{{ dc_master }}'
 
-  - name: add /etc/dovecot/conf.d/10-master.conf lines 
+  - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
     ansible.builtin.lineinfile:
       path: /etc/dovecot/conf.d/10-master.conf
-      insertafter: '.*unix_listener dict .*'
-      line: '{{ item.name }} = {{ item.value }}'
+      regexp: '^(|\s*)#(|\s*){{ item.name }}(.*)$'
+      line: '\1\2{{ item.name }} = {{ item.value }}'
+      backrefs: yes
     loop: '{{ dc_master }}'
 
   - name: restart service postfix
