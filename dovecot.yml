@@ -79,19 +79,19 @@
       line: '{{ item.name }} = {{ item.value }}'
     loop: '{{ dc_auth }}'
 
-  - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
-    ansible.builtin.lineinfile:
-      path: /etc/dovecot/conf.d/10-master.conf
-      regexp: '^(|\s*){{ item.name }}(.*)$'
-      line: '\1#{{ item.name }}\2'
-      backrefs: yes
-    loop: '{{ dc_master }}'
+  # - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
+  #   ansible.builtin.lineinfile:
+  #     path: /etc/dovecot/conf.d/10-master.conf
+  #     regexp: '^(|\s*){{ item.name }}(.*)$'
+  #     line: '\1#{{ item.name }}\2'
+  #     backrefs: yes
+  #   loop: '{{ dc_master }}'
 
   - name: mask current settings in /etc/dovecot/conf.d/10-master.conf
     ansible.builtin.lineinfile:
       path: /etc/dovecot/conf.d/10-master.conf
-      regexp: '^(|\s*)#(|\s*){{ item.name }}(.*)$'
-      line: '\1\2{{ item.name }} = {{ item.value }}'
+      insertafter:  .*unix_listener auth-userdb.*
+      line: '    {{ item.name }} = {{ item.value }}'
       backrefs: yes
     loop: '{{ dc_master }}'
 
