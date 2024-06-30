@@ -4,8 +4,8 @@
   become: true
   # gather_facts: false
   vars:
-    stuser: mariyam
-    stpassword: BruCStnMT5
+    stuser: kirsty
+    stpassword: ksH85UJjhb
     stmaildomain: stratos.xfusioncorp.com
     stmailhost: stmail01
   tasks:
@@ -37,26 +37,18 @@
           value: "172.16.238.0/24, 127.0.0.0/8"
         - name: home_mailbox
           value: "Maildir/"
-        # - name: relay_domains
-        #   value: "$mydestination"
-
-  # - name: prepare file
-  #   ansible.builtin.copy:
-  #     src: main.cf.original
-  #     dest: main.cf
 
   - name: mask current settings in postfix/main.cf
     ansible.builtin.lineinfile:
-      path: main.cf
+      path: /etc/postfix/main.cf
       regexp: '^{{ item.name }}(.*)$'
       line: '#{{ item.name }}\1'
       backrefs: yes
     loop: '{{ pfix }}'
 
-
   - name: add postfix/main.cf lines 
     ansible.builtin.lineinfile:
-      path: main.cf
+      path: /etc/postfix/main.cf
       insertafter: '^#{{ item.name }}.*'
       line: '{{ item.name }} = {{ item.value }}'
     loop: '{{ pfix }}'
