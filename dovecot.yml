@@ -17,6 +17,9 @@
 
   - name: prepare data
     ansible.builtin.set_fact:
+      dc:
+        - name: protocols
+          value: imap pop3 lmtp
       dc_mail:
         - name: mail_location
           value: maildir:~/Maildir
@@ -24,12 +27,27 @@
         - name: disable_plaintext_auth
           value: "yes"
         - name: auth_mechanisms
-          value: 
+          value: plain login
       dc_master:
         - name: user
           value: postfix
         - name: group
           value: postfix
+
+  - name: mask current settings in /etc/dovecot/dovecot.conf
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/dovecot.conf
+      regexp: '^{{ item.name }}(.*)$'
+      line: '#{{ item.name }}\1'
+      backrefs: yes
+    loop: '{{ dc }}'
+
+  - name: add /etc/dovecot/dovecot.conf
+    ansible.builtin.lineinfile:
+      path: /etc/dovecot/dovecot.conf
+      insertafter: '^#{{ item.name }}.*'
+      line: '{{ item.name }} = {{ item.value }}'
+    loop: '{{ dc }}'
 
   - name: mask current settings in /etc/dovecot/conf.d/10-mail.conf
     ansible.builtin.lineinfile:
