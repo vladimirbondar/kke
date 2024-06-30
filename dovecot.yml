@@ -22,7 +22,7 @@
           value: maildir:~/Maildir
       dc_auth:
         - name: disable_plaintext_auth
-          value: yes
+          value: "yes"
         - name: auth_mechanisms
           value: 
       dc_master:
